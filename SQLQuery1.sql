@@ -103,5 +103,25 @@ SET SoldAsVacant='No'
 WHERE SoldAsVacant='N';
 
 
+SELECT * FROM Nashville;
+-- TASK 5. Remove Duplicates
+WITH RowNumCTE AS(
+	SELECT *,
+		ROW_NUMBER() OVER(PARTITION BY 
+							ParcelID,
+							SplitedPropertyAddress,
+							SalePrice,
+							ConvertedSaleDate,
+							LegalReference
+								ORDER BY 
+									UniqueID) as row_number
+	FROM 
+		Nashville
+		) DELETE 
+		FROM RowNumCTE
+		WHERE row_number>1;
+					
+-- TASK 6. Remove Unused Columns
 
-
+ALTER TABLE Nashville
+DROP COLUMN SplitedOwnerAddress,TaxDistrict;
